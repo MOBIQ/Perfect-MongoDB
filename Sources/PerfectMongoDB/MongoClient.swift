@@ -17,8 +17,6 @@
 //===----------------------------------------------------------------------===//
 //
 
-// mods
-
 import PerfectCMongo
 
 /**
@@ -53,7 +51,7 @@ public enum MongoClientError: Error {
 
 public class MongoClient {
 
-	var ptr = OpaquePointer(bitPattern: 0)
+	var pointer = OpaquePointer(bitPattern: 0)
     
     /**
      *  Result Status enum for a MongoDB event
@@ -70,11 +68,11 @@ public class MongoClient {
         guard let ptr = mongoc_client_new(uri) else {
             throw MongoClientError.initError("Could not parse URI '\(uri)'")
         }
-        self.ptr = ptr
+        self.pointer = ptr
 	}
 
     init(pointer: OpaquePointer?) {
-        ptr = pointer
+        self.pointer = pointer
     }
 	
     deinit {
@@ -83,11 +81,11 @@ public class MongoClient {
 
     /// terminate current Mongo Client connection
 	public func close() {
-        guard let ptr = self.ptr else {
+        guard let ptr = self.pointer else {
             return
         }
         mongoc_client_destroy(ptr)
-        self.ptr = nil
+        self.pointer = nil
 	}
 
     /**
@@ -127,7 +125,7 @@ public class MongoClient {
         guard let doc = bson.doc else {
             return .error(1, 1, "Invalid BSON doc")
         }
-		guard mongoc_client_get_server_status(self.ptr, readPrefs, doc, &error) else {
+		guard mongoc_client_get_server_status(self.pointer, readPrefs, doc, &error) else {
 			return Result.fromError(error)
 		}
 		return .replyDoc(bson)
@@ -140,7 +138,7 @@ public class MongoClient {
     */
 	public func databaseNames() -> [String] {
 		var ret = [String]()
-		guard let names = mongoc_client_get_database_names(self.ptr, nil) else {
+		guard let names = mongoc_client_get_database_names(self.pointer, nil) else {
 			return ret
 		}
 		var curr = names
