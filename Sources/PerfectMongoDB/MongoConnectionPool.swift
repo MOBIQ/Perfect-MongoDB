@@ -68,8 +68,8 @@ public class MongoClientPool {
      *  - parameter client: MongoClient to be pushed back into pool
      */
     public func pushClient(_ client: MongoClient) {
-        mongoc_client_pool_push(ptr, client.ptr)
-        client.ptr = nil
+        mongoc_client_pool_push(ptr, client.pointer)
+        client.pointer = nil
     }
     
     /**

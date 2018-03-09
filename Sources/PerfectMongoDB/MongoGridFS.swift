@@ -352,7 +352,7 @@ public class GridFS {
 	///	MongoClientError, if failed to get the expected handle
 	public init(client: MongoClient, database: String, prefix: String? = nil) throws {
 		/// get gridfs handle from a mongo client
-		handle = mongoc_client_get_gridfs(client.ptr, database, prefix, &error)
+		handle = mongoc_client_get_gridfs(client.pointer, database, prefix, &error)
 		guard handle != nil else {
 			throw MongoClientError.initError("gridfs.init() = [\(error.code), \(error.domain)]")
 		}

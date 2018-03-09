@@ -35,7 +35,7 @@ public class MongoDatabase {
      *  - returns: a reference to the requested database
     */
 	public init(client: MongoClient, databaseName: String) {
-		self.ptr = mongoc_client_get_database(client.ptr, databaseName)
+		self.ptr = mongoc_client_get_database(client.pointer, databaseName)
 	}
     
     deinit {
